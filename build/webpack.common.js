@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   entry: {
-    app: './src/index.ts' // 入口文件的位置
+    app: './src/main.ts' // 入口文件的位置
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.ts'],

@@ -1,6 +1,7 @@
 const merge = require('webpack-merge')
 const common = require('./webpack.common.js')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const copyWebpackPlugin = require('copy-webpack-plugin')
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const path = require('path')
 
 module.exports = merge(common, {
@@ -55,6 +56,30 @@ module.exports = merge(common, {
               limit: 8192, // 表示小于8kb的图片转为base64,大于8kb的是路径
               outputPath: 'images' // 定义输出的图片文件夹
             }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              mozjpeg: {
+                progressive: true,
+                quality: 65
+              },
+              // optipng.enabled: false will disable optipng
+              optipng: {
+                enabled: false
+              },
+              pngquant: {
+                quality: [0.65, 0.9],
+                speed: 4
+              },
+              gifsicle: {
+                interlaced: false
+              },
+              // the webp option will enable WEBP
+              webp: {
+                quality: 75
+              }
+            }
           }
         ]
       }
@@ -84,8 +109,14 @@ module.exports = merge(common, {
         }
       }
     }
-  }
-  // plugins: [
-  //   // new BundleAnalyzerPlugin() // 使用此插件能清晰的展示出打包后的各个bundle所依赖的模块
-  // ]
+  },
+  plugins: [
+    new copyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../public'), // 打包的静态资源目录地址
+        to: './public' // 打包到dist下面的static
+      }
+    ])
+    // new BundleAnalyzerPlugin() // 使用此插件能清晰的展示出打包后的各个bundle所依赖的模块
+  ]
 })

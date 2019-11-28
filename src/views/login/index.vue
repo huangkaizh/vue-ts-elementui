@@ -43,10 +43,11 @@
           autocomplete="on"
           @keyup.enter.native="handleLogin"
         />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon
-            :name="passwordType === 'password' ? 'eye-off' : 'eye-on'"
-          />
+        <span
+          class="show-pwd"
+          @click="showPwd"
+        >
+          <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
         </span>
       </el-form-item>
 
@@ -72,18 +73,21 @@
         <el-button
           class="thirdparty-button"
           type="primary"
-          @click="showDialog = true"
+          @click="showDialog=true"
         >
           {{ $t('login.thirdparty') }}
         </el-button>
       </div>
     </el-form>
 
-    <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog">
+    <el-dialog
+      :title="$t('login.thirdparty')"
+      :visible.sync="showDialog"
+    >
       {{ $t('login.thirdpartyTips') }}
-      <br />
-      <br />
-      <br />
+      <br>
+      <br>
+      <br>
       <social-sign />
     </el-dialog>
   </div>
@@ -98,7 +102,7 @@ import { isValidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect/index.vue'
 import SocialSign from './components/SocialSignin.vue'
 
-type Dictionary<T> = { [key: string]: T }
+type Dictionary < T > = { [key: string]: T }
 
 @Component({
   name: 'Login',
@@ -149,9 +153,9 @@ export default class extends Vue {
 
   mounted() {
     if (this.loginForm.username === '') {
-      ;(this.$refs.username as Input).focus()
+      (this.$refs.username as Input).focus()
     } else if (this.loginForm.password === '') {
-      ;(this.$refs.password as Input).focus()
+      (this.$refs.password as Input).focus()
     }
   }
 
@@ -162,12 +166,12 @@ export default class extends Vue {
       this.passwordType = 'password'
     }
     this.$nextTick(() => {
-      ;(this.$refs.password as Input).focus()
+      (this.$refs.password as Input).focus()
     })
   }
 
   private handleLogin() {
-    ;(this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
+    (this.$refs.loginForm as ElForm).validate(async(valid: boolean) => {
       if (valid) {
         this.loading = true
         await UserModule.Login(this.loginForm)
@@ -200,12 +204,8 @@ export default class extends Vue {
 // References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
   .login-container .el-input {
-    input {
-      color: $loginCursorColor;
-    }
-    input::first-line {
-      color: $lightGray;
-    }
+    input { color: $loginCursorColor; }
+    input::first-line { color: $lightGray; }
   }
 }
 

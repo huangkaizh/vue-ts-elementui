@@ -2,8 +2,8 @@ const merge = require('webpack-merge')
 const common = require('./webpack.common')
 const path = require('path')
 
-const devServerPort = 9527
-const mockServerPort = 9528
+const devServerPort = 9627
+const mockServerPort = 9628
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)

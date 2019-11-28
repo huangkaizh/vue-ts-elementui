@@ -16,6 +16,7 @@ import '@/icons/components'
 import '@/permission'
 import '@/utils/error-log'
 import * as directives from '@/directives'
+import * as filters from '@/filters'
 
 Vue.use(ElementUI, {
   size: AppModule.size,
@@ -30,6 +31,12 @@ Vue.use(SvgIcon, {
 
 Object.keys(directives).forEach(key => {
   Vue.directive(key, directives as { [key: string]: DirectiveOptions })
+})
+
+
+// Register global filter functions
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, (filters as { [key: string ]: Function })[key])
 })
 
 // eslint-disable-next-line no-new

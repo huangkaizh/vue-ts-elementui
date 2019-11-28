@@ -13,6 +13,9 @@ declare module '*.gif' {
 
 declare module 'lodash'
 declare module 'file-saver'
-declare module 'sortablejs'
+// declare module 'sortablejs'
 declare module 'js-cookie'
 declare module 'nprogress'
+
+// TODO: remove this part after vue-count-to has its typescript file
+declare module 'vue-count-to'
