@@ -2,6 +2,7 @@ const { join: pathJoin } = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: {
@@ -18,6 +19,9 @@ module.exports = {
     path: pathJoin(__dirname, '../dist') // 输出的绝对路径
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.BASE_URL': JSON.stringify('public/')
+    }),
     new HtmlWebpackPlugin({
       template: 'template.html', // 指定模板文件
       filename: 'index.html' // 指定输出的html文件名称

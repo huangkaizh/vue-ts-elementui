@@ -1,14 +1,6 @@
 <template>
-  <div
-    id="header-search"
-    :class="{'show': show}"
-    class="header-search"
-  >
-    <svg-icon
-      class="search-icon"
-      name="search"
-      @click.stop="click"
-    />
+  <div id="header-search" :class="{ show: show }" class="header-search">
+    <svg-icon class="search-icon" name="search" @click.stop="click" />
     <el-select
       ref="headerSearchSelect"
       v-model="search"
@@ -45,9 +37,9 @@ import i18n from '@/lang' // Internationalization
 export default class extends Vue {
   private search = ''
   private show = false
-  private options: RouteConfig[] = []
+  private options: any = []
   private searchPool: RouteConfig[] = []
-  private fuse?: Fuse<RouteConfig>
+  private fuse?: Fuse<RouteConfig, Fuse.FuseOptions<RouteConfig>>
 
   get routes() {
     return PermissionModule.routes
@@ -88,12 +80,14 @@ export default class extends Vue {
   private click() {
     this.show = !this.show
     if (this.show) {
-      this.$refs.headerSearchSelect && (this.$refs.headerSearchSelect as HTMLElement).focus()
+      this.$refs.headerSearchSelect &&
+        (this.$refs.headerSearchSelect as HTMLElement).focus()
     }
   }
 
   private close() {
-    this.$refs.headerSearchSelect && (this.$refs.headerSearchSelect as HTMLElement).blur()
+    this.$refs.headerSearchSelect &&
+      (this.$refs.headerSearchSelect as HTMLElement).blur()
     this.options = []
     this.show = false
   }
@@ -108,26 +102,34 @@ export default class extends Vue {
   }
 
   private initFuse(list: RouteConfig[]) {
-    this.fuse = new Fuse(list, {
+    let fuseOptions: Fuse.FuseOptions<RouteConfig> = {
       shouldSort: true,
       threshold: 0.4,
       location: 0,
       distance: 100,
       maxPatternLength: 32,
       minMatchCharLength: 1,
-      keys: [{
-        name: 'title',
-        weight: 0.7
-      }, {
-        name: 'path',
-        weight: 0.3
-      }]
-    })
+      keys: [
+        {
+          name: 'meta.title',
+          weight: 0.7
+        },
+        {
+          name: 'path',
+          weight: 0.3
+        }
+      ]
+    }
+    this.fuse = new Fuse(list, fuseOptions)
   }
 
   // Filter out the routes that can be displayed in the sidebar
   // And generate the internationalized title
-  private generateRoutes(routes: RouteConfig[], basePath = '/', prefixTitle: string[] = []) {
+  private generateRoutes(
+    routes: RouteConfig[],
+    basePath = '/',
+    prefixTitle: string[] = []
+  ) {
     let res: RouteConfig[] = []
 
     for (const router of routes) {
@@ -156,7 +158,11 @@ export default class extends Vue {
 
       // recursive child routes
       if (router.children) {
-        const tempRoutes = this.generateRoutes(router.children, data.path, data.meta.title)
+        const tempRoutes = this.generateRoutes(
+          router.children,
+          data.path,
+          data.meta.title
+        )
         if (tempRoutes.length >= 1) {
           res = [...res, ...tempRoutes]
         }
@@ -168,6 +174,8 @@ export default class extends Vue {
   private querySearch(query: string) {
     if (query !== '') {
       if (this.fuse) {
+        console.log('this.fuse', this.fuse)
+        console.log('this.fuse.search(query)', this.fuse.search(query))
         this.options = this.fuse.search(query)
       }
     } else {
